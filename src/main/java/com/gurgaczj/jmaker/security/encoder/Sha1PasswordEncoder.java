@@ -1,9 +1,12 @@
-package com.gurgaczj.jmaker.security;
+package com.gurgaczj.jmaker.security.encoder;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+/**
+ * Provided for forgottenserver compatibility.
+ */
 @Component
 public class Sha1PasswordEncoder implements PasswordEncoder {
 
