@@ -22,12 +22,12 @@ public class AccountRepositoryTests {
     @Test
     public void saveTest(){
         Account account = new Account();
-        account.setUsername("asdasd");
+        account.setUsername("asdasd456u");
         account.setCreationDate(Instant.now().getEpochSecond());
-        account.setSecret("efewfesfsfe");
-        account.setEmail("safd@wpp.pl");
+        account.setSecret("efewfesfs56u56jfe");
+        account.setEmail("sa56ikjfd@wpp.pl");
         account.setLastDay(3215235L);
-        account.setPassword("pass");
+        account.setPassword("pass67ih");
         account.setPremiumDays(325235L);
         account.setType(1);
 

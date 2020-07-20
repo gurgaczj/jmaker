@@ -1,17 +1,12 @@
 package com.gurgaczj.jmaker.bean.database.mysql;
 
-import com.gurgaczj.jmaker.jwt.JwtUtils;
 import io.r2dbc.spi.ConnectionFactories;
 import io.r2dbc.spi.ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactoryOptions;
-import io.r2dbc.spi.Option;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
-import org.springframework.data.r2dbc.connectionfactory.SmartConnectionFactory;
-
-import java.time.Duration;
 
 import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 
@@ -27,7 +22,7 @@ public class MySqlConnectionFactory extends AbstractR2dbcConfiguration {
                 .option(USER, "root")
                 .option(PORT, 3306)  // optional, default 3306
                 .option(PASSWORD, "") // optional, default null, null means has no password
-                .option(DATABASE, "forgottenserver") // optional, default null, null means not specifying the database
+                .option(DATABASE, "ots12") // optional, default null, null means not specifying the database
 //                .option(CONNECT_TIMEOUT, Duration.ofSeconds(3)) // optional, default null, null means no timeout
 //                .option(SSL, true) // optional, default sslMode is "preferred", it will be ignore if sslMode is set
 //                .option(Option.valueOf("sslMode"), "verify_identity") // optional, default "preferred"
