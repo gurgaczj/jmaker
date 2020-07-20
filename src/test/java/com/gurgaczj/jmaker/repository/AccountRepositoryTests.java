@@ -24,7 +24,7 @@ public class AccountRepositoryTests {
         Account account = new Account();
         account.setUsername("asdasd456u");
         account.setCreationDate(Instant.now().getEpochSecond());
-        account.setSecret("efewfesfs56u56jfe");
+        account.setSecret("efewfesfs56u56e");
         account.setEmail("sa56ikjfd@wpp.pl");
         account.setLastDay(3215235L);
         account.setPassword("pass67ih");

@@ -1,5 +1,6 @@
 package com.gurgaczj.jmaker.security;
 
+import com.gurgaczj.jmaker.security.encoder.Sha1PasswordEncoder;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
