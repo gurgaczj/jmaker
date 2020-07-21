@@ -5,6 +5,7 @@ import com.gurgaczj.jmaker.security.filter.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -28,16 +29,17 @@ public class ApplicationSecurity {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http){
         http
-                .csrf().disable()
-                .authorizeExchange()
-                .anyExchange().authenticated()
+                //.exceptionHandling(new CustomExceptionHandler())
+                .anonymous().authorities("ROLE_ANONYMOUS")
                 .and()
+                .csrf().disable()
                 .httpBasic().disable()
                 .formLogin()
                     .authenticationSuccessHandler(authenticationResponse::onAuthenticationSuccess)
-                    .authenticationFailureHandler(authenticationResponse::onAuthenticationFailure)
-        .and()
-        .addFilterAt(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION);
+                    .authenticationFailureHandler(authenticationResponse::onAuthenticationFailure);
+
+       http.addFilterAt(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION);
+//       http.authorizeExchange().pathMatchers(HttpMethod.GET, "/dupa").hasRole("USER");
         return http.build();
     }
 

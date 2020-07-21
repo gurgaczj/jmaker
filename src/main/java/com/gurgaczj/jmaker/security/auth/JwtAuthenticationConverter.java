@@ -2,6 +2,8 @@ package com.gurgaczj.jmaker.security.auth;
 
 import com.gurgaczj.jmaker.jwt.JwtUtils;
 import io.jsonwebtoken.JwtException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +17,8 @@ import java.util.function.Function;
 
 @Component
 public class JwtAuthenticationConverter implements ServerAuthenticationConverter {
+
+    private final static Logger logger = LoggerFactory.getLogger(JwtAuthenticationConverter.class);
 
     private final static String BEARER = "Bearer ";
     private final Function<String, String> typeRemover = token -> token.replaceFirst(BEARER, "");
@@ -45,6 +49,7 @@ public class JwtAuthenticationConverter implements ServerAuthenticationConverter
             return Mono.just(new UsernamePasswordAuthenticationToken(
                     jwtUtils.getIssuer(token), null, jwtUtils.getGrantedAuthorities(token)));
         } catch (JwtException e) {
+            logger.info(e.getMessage());
             return Mono.empty();
         }
     }

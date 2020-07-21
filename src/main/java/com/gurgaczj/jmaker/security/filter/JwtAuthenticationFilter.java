@@ -1,5 +1,6 @@
 package com.gurgaczj.jmaker.security.filter;
 
+import com.gurgaczj.jmaker.security.auth.JwtAuthenticationManager;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -18,9 +19,8 @@ import reactor.core.publisher.Mono;
 @Component
 public class JwtAuthenticationFilter extends AuthenticationWebFilter {
 
-    public JwtAuthenticationFilter(ServerAuthenticationConverter jwtConverter,
-                                   ReactiveAuthenticationManager authenticationManager) {
-        super(authenticationManager);
+    public JwtAuthenticationFilter(ServerAuthenticationConverter jwtConverter) {
+        super(new JwtAuthenticationManager());
         super.setServerAuthenticationConverter(jwtConverter);
     }
 
