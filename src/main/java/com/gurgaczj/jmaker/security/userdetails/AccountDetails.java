@@ -9,11 +9,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-public class ApplicationUserDetails implements UserDetails {
+public class AccountDetails implements UserDetails {
 
     private Account account;
 
-    public ApplicationUserDetails(Account account) {
+    public AccountDetails(Account account) {
         this.account = account;
     }
 

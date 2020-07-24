@@ -1,4 +1,4 @@
-package com.gurgaczj.jmaker.bean.database.h2;
+package com.gurgaczj.jmaker.h2;
 
 import com.gurgaczj.jmaker.model.Account;
 import com.gurgaczj.jmaker.repository.AccountRepository;

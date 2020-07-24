@@ -1,4 +1,4 @@
-package com.gurgaczj.jmaker.bean.database.h2;
+package com.gurgaczj.jmaker.h2;
 
 import io.r2dbc.spi.ConnectionFactory;
 import org.springframework.context.annotation.Bean;

@@ -1,6 +1,6 @@
 package com.gurgaczj.jmaker.security;
 
-import com.gurgaczj.jmaker.bean.database.h2.TestDataInitializer;
+import com.gurgaczj.jmaker.h2.TestDataInitializer;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
