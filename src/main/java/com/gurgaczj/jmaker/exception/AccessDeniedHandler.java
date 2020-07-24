@@ -1,4 +1,4 @@
-package com.gurgaczj.jmaker.controller;
+package com.gurgaczj.jmaker.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
