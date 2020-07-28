@@ -28,6 +28,7 @@ public class ApplicationSecurity {
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http){
+//        http.authorizeExchange().pathMatchers("/swagger-ui/**", "/v3/api-docs/**", "/webjars/**").permitAll();
         http
                 //.exceptionHandling(new CustomExceptionHandler())
                 .anonymous().authorities("ROLE_ANONYMOUS")
