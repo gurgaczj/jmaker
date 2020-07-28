@@ -21,7 +21,7 @@
 		<r2dbc-h2.version>0.8.4.RELEASE</r2dbc-h2.version>
 		<h2database.version>1.4.200</h2database.version>
 		<apache-commons.version>1.14</apache-commons.version>
-		<springfox.version>3.0.0</springfox.version>
+		<springdoc.version>1.4.3</springdoc.version>
 	</properties>
 
 	<dependencies>
@@ -129,30 +129,15 @@
 			<version>${apache-commons.version}</version>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>io.springfox</groupId>-->
-<!--			<artifactId>springfox-swagger2</artifactId>-->
-<!--			<version>${springfox.version}</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>io.springfox</groupId>-->
-<!--			<artifactId>springfox-swagger-ui</artifactId>-->
-<!--			<version>${springfox.version}</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>io.springfox</groupId>-->
-<!--			<artifactId>springfox-spring-webflux</artifactId>-->
-<!--			<version>${springfox.version}</version>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-webflux-ui</artifactId>
-			<version>1.4.3</version>
+			<version>${springdoc.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-webmvc-core</artifactId>
-			<version>1.4.3</version>
+			<version>${springdoc.version}</version>
 		</dependency>
 	</dependencies>
 
