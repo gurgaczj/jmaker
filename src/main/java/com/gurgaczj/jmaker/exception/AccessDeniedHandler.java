@@ -14,7 +14,8 @@ public class AccessDeniedHandler {
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(AccessDeniedException.class)
-    public @ResponseBody Mono<ErrorMessage> handle(){
+    public @ResponseBody
+    Mono<ErrorMessage> handle() {
         return Mono.just(ErrorMessage.create(HttpStatus.FORBIDDEN, "Access Denied"));
     }
 }

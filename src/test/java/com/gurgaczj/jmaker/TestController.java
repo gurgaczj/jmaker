@@ -15,7 +15,7 @@ public class TestController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping(value = "/test1", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<String> test1(Principal principal){
+    public Mono<String> test1(Principal principal) {
         return Mono.just(principal.getName());
     }
 
@@ -23,7 +23,7 @@ public class TestController {
 
     @PreAuthorize("hasAnyRole('USER', 'ANONYMOUS')")
     @GetMapping(value = "/test2", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<String> test2(Principal principal){
+    public Mono<String> test2(Principal principal) {
         return Mono.just(principal.getName());
     }
 

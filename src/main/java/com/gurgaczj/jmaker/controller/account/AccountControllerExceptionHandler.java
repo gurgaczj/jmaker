@@ -17,8 +17,9 @@ public class AccountControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({DataIntegrityViolationException.class, R2dbcDataIntegrityViolationException.class})
-    public @ResponseBody Mono<ErrorMessage> handleViolationOfUniqueValue(Exception exception){
-        if(exception.getMessage().contains("'name'"))
+    public @ResponseBody
+    Mono<ErrorMessage> handleViolationOfUniqueValue(Exception exception) {
+        if (exception.getMessage().contains("'name'"))
             return Mono.just(ErrorMessage.create(HttpStatus.BAD_REQUEST, "This username is already taken"));
 
         return Mono.just(ErrorMessage.create(HttpStatus.BAD_REQUEST, "This email is already taken"));
@@ -26,13 +27,15 @@ public class AccountControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(MailSenderException.class)
-    public @ResponseBody Mono<ErrorMessage> handleMailSendFailure(Exception e){
+    public @ResponseBody
+    Mono<ErrorMessage> handleMailSendFailure(Exception e) {
         return Mono.just(ErrorMessage.create(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(RegisterException.class)
-    public @ResponseBody Mono<ErrorMessage> handleRegisterError(Exception e){
+    public @ResponseBody
+    Mono<ErrorMessage> handleRegisterError(Exception e) {
         return Mono.just(ErrorMessage.create(HttpStatus.BAD_REQUEST, e.getMessage()));
     }
 }

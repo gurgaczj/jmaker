@@ -21,7 +21,7 @@ public class ErrorMessage {
     @NonNull
     private String message;
 
-    public static ErrorMessage create(HttpStatus status, String message){
+    public static ErrorMessage create(HttpStatus status, String message) {
         return new ErrorMessage(status.value(), status.getReasonPhrase(), message);
     }
 }

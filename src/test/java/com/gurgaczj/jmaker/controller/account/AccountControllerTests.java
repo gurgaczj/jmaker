@@ -33,7 +33,7 @@ public class AccountControllerTests {
     }
 
     @Test
-    public void registerTest(){
+    public void registerTest() {
         Register register = RegisterValidatorTest.getRegisterModel();
         register.setUsername("userName123");
 
@@ -52,7 +52,7 @@ public class AccountControllerTests {
     }
 
     @Test
-    public void registerTest_passwordNotMeetRequirements(){
+    public void registerTest_passwordNotMeetRequirements() {
         Register register = RegisterValidatorTest.getRegisterModel();
         register.setPassword("pass");
 
@@ -63,15 +63,15 @@ public class AccountControllerTests {
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .as(StepVerifier::create)
-                .assertNext(clientResponse ->{
-                        assertEquals(HttpStatus.BAD_REQUEST, clientResponse.statusCode());
+                .assertNext(clientResponse -> {
+                    assertEquals(HttpStatus.BAD_REQUEST, clientResponse.statusCode());
                 })
                 .expectComplete()
                 .verify();
     }
 
     @Test
-    public void registerTest_passwordNotTheSame(){
+    public void registerTest_passwordNotTheSame() {
         Register register = RegisterValidatorTest.getRegisterModel();
         register.setVerifyPassword("password1!");
 
@@ -82,7 +82,7 @@ public class AccountControllerTests {
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .as(StepVerifier::create)
-                .assertNext(clientResponse ->{
+                .assertNext(clientResponse -> {
                     assertEquals(HttpStatus.BAD_REQUEST, clientResponse.statusCode());
                 })
                 .expectComplete()
@@ -90,7 +90,7 @@ public class AccountControllerTests {
     }
 
     @Test
-    public void registerTest_wrongEmailFormat(){
+    public void registerTest_wrongEmailFormat() {
         Register register = RegisterValidatorTest.getRegisterModel();
         register.setEmail("mail-user@.pl");
 
@@ -101,7 +101,7 @@ public class AccountControllerTests {
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .as(StepVerifier::create)
-                .assertNext(clientResponse ->{
+                .assertNext(clientResponse -> {
                     assertEquals(HttpStatus.BAD_REQUEST, clientResponse.statusCode());
                 })
                 .expectComplete()
@@ -109,7 +109,7 @@ public class AccountControllerTests {
     }
 
     @Test
-    public void registerTest_usernameAlreadyExist(){
+    public void registerTest_usernameAlreadyExist() {
         Register register = RegisterValidatorTest.getRegisterModel();
         register.setUsername(TestDataInitializer.TEST_USER);
 
@@ -120,7 +120,7 @@ public class AccountControllerTests {
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .as(StepVerifier::create)
-                .assertNext(clientResponse ->{
+                .assertNext(clientResponse -> {
                     assertEquals(HttpStatus.BAD_REQUEST, clientResponse.statusCode());
                 })
                 .expectComplete()

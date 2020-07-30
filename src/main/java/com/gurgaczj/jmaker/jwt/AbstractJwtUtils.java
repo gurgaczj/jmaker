@@ -26,7 +26,7 @@ public abstract class AbstractJwtUtils implements JwtUtils {
         this.duration = duration;
     }
 
-    public String generateToken(String username, Collection<? extends GrantedAuthority> authorities){
+    public String generateToken(String username, Collection<? extends GrantedAuthority> authorities) {
         logger.info("Generating token for " + username);
         return Jwts.builder()
                 .setAudience(appName)
@@ -38,7 +38,7 @@ public abstract class AbstractJwtUtils implements JwtUtils {
                 .compact();
     }
 
-    public Jws<Claims> parseClaims(String token){
+    public Jws<Claims> parseClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .requireAudience(appName)
@@ -62,8 +62,8 @@ public abstract class AbstractJwtUtils implements JwtUtils {
 
         Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
 
-        for(LinkedHashMap<String, String> map: listMap){
-            for(Map.Entry<String, String> authEntry: map.entrySet()){
+        for (LinkedHashMap<String, String> map : listMap) {
+            for (Map.Entry<String, String> authEntry : map.entrySet()) {
                 String role = authEntry.getValue();
                 authorities.add(new SimpleGrantedAuthority(role));
             }
@@ -72,7 +72,7 @@ public abstract class AbstractJwtUtils implements JwtUtils {
         return authorities;
     }
 
-    protected Date getExpirationDate(){
+    protected Date getExpirationDate() {
         return Date.from(Instant.now().plusSeconds(duration * 60 * 60));
     }
 }

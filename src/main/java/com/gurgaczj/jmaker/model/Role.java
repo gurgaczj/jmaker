@@ -2,8 +2,8 @@ package com.gurgaczj.jmaker.model;
 
 public class Role {
 
-    public static String getRole(int accountType){
-        switch (accountType){
+    public static String getRole(int accountType) {
+        switch (accountType) {
             case 2:
                 return "ROLE_TUTOR";
             case 3:
