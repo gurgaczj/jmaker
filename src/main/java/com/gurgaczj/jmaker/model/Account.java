@@ -50,4 +50,13 @@ public class Account {
     @NonNull
     @Column(value = "creation")
     private Long creationDate;
+
+    @Column("register_hash")
+    @Nullable
+    private String hash;
+
+    @Column("is_enabled")
+    @NonNull
+    private boolean isEnabled;
+
 }

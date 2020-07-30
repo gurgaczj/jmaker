@@ -1,5 +1,6 @@
 package com.gurgaczj.jmaker.exception;
 
+import com.gurgaczj.jmaker.model.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,7 +14,7 @@ public class AccessDeniedHandler {
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(AccessDeniedException.class)
-    public @ResponseBody Mono<String> handle(){
-        return Mono.just("Access Denied");
+    public @ResponseBody Mono<ErrorMessage> handle(){
+        return Mono.just(ErrorMessage.create(HttpStatus.FORBIDDEN, "Access Denied"));
     }
 }
