@@ -103,12 +103,12 @@ public class RegisterValidatorTest {
                 .verify();
     }
 
-    private Register getRegisterModel(){
+    public static Register getRegisterModel(){
         Register register = new Register();
-        register.setUsername("username");
+        register.setUsername("testuser");
         register.setPassword("Password1!");
         register.setVerifyPassword("Password1!");
-        register.setEmail("some@mail.com");
+        register.setEmail("testuser@mail.com");
 
         return register;
     }
