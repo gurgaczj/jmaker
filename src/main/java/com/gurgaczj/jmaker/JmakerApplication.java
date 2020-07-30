@@ -8,7 +8,7 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 @EnableWebFlux
 public class JmakerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(JmakerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(JmakerApplication.class, args);
+    }
 }

@@ -72,7 +72,7 @@ public class RegisterServiceImpl implements RegisterService {
         if (shouldSendActivationMail) {
             try {
                 emailService.sendSimpleMessage(createAccountVerificationMessage(acc));
-            } catch (MailException e){
+            } catch (MailException e) {
                 logger.error(e.getMessage());
                 return Mono.empty();
             }
@@ -113,7 +113,7 @@ public class RegisterServiceImpl implements RegisterService {
         account.setPremiumDays(0L);
         account.setType(1);
         account.setHash(DigestUtils.sha1Hex(registerModel.getEmail().getBytes()));
-        if(!shouldSendActivationMail)
+        if (!shouldSendActivationMail)
             account.setEnabled(true);
 
         return account;

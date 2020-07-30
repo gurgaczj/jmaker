@@ -32,7 +32,7 @@ public class JwtUtilsTests {
             String token = getJwtUtils().generateToken(username, roles);
 
             assertNotNull(token);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             fail();
         }

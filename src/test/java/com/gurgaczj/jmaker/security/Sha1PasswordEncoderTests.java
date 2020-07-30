@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class Sha1PasswordEncoderTests {
 
     @Test
-    public void encodeTest(){
+    public void encodeTest() {
         PasswordEncoder passwordEncoder = new Sha1PasswordEncoder();
 
         String password = "pass";
