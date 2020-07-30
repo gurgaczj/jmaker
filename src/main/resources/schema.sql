@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `lastday` int(10) unsigned NOT NULL DEFAULT '0',
   `email` varchar(255) NOT NULL DEFAULT '',
   `creation` int(11) NOT NULL DEFAULT '0',
+  `register_hash` varchar(255) DEFAULT NULL,
+  `is_enabled` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 );

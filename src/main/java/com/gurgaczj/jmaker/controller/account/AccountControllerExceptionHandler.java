@@ -1,5 +1,9 @@
 package com.gurgaczj.jmaker.controller.account;
 
+import com.gurgaczj.jmaker.exception.MailSenderException;
+import com.gurgaczj.jmaker.exception.RegisterException;
+import com.gurgaczj.jmaker.model.ErrorMessage;
+import io.r2dbc.spi.R2dbcDataIntegrityViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,11 +16,23 @@ import reactor.core.publisher.Mono;
 public class AccountControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public @ResponseBody Mono<String> handle(Exception exception){
+    @ExceptionHandler({DataIntegrityViolationException.class, R2dbcDataIntegrityViolationException.class})
+    public @ResponseBody Mono<ErrorMessage> handleViolationOfUniqueValue(Exception exception){
         if(exception.getMessage().contains("'name'"))
-            return Mono.just("This username is already taken");
+            return Mono.just(ErrorMessage.create(HttpStatus.BAD_REQUEST, "This username is already taken"));
 
-        return Mono.just("This email is already taken");
+        return Mono.just(ErrorMessage.create(HttpStatus.BAD_REQUEST, "This email is already taken"));
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(MailSenderException.class)
+    public @ResponseBody Mono<ErrorMessage> handleMailSendFailure(Exception e){
+        return Mono.just(ErrorMessage.create(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(RegisterException.class)
+    public @ResponseBody Mono<ErrorMessage> handleRegisterError(Exception e){
+        return Mono.just(ErrorMessage.create(HttpStatus.BAD_REQUEST, e.getMessage()));
     }
 }
