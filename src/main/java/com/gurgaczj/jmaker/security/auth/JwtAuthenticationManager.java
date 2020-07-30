@@ -2,7 +2,6 @@ package com.gurgaczj.jmaker.security.auth;
 
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 public class JwtAuthenticationManager implements ReactiveAuthenticationManager {

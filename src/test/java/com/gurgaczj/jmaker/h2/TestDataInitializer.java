@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 
 @Component
-@Profile("dev")
+@Profile("test")
 public class TestDataInitializer implements CommandLineRunner {
 
     private final PasswordEncoder passwordEncoder;
@@ -34,6 +34,7 @@ public class TestDataInitializer implements CommandLineRunner {
         account.setLastDay(3215235L);
         account.setPassword(passwordEncoder.encode(TEST_USER_PASS));
         account.setPremiumDays(325235L);
+        account.setEnabled(true);
         account.setType(1);
 
         account = accountRepository.save(account).block();

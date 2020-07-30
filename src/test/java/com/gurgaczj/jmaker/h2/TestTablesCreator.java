@@ -10,7 +10,7 @@ import org.springframework.data.r2dbc.connectionfactory.init.ResourceDatabasePop
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("dev")
+@Profile("test")
 public class TestTablesCreator {
 
     @Bean

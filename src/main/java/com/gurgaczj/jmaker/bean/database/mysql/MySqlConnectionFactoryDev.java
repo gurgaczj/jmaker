@@ -12,11 +12,11 @@ import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 
 @Configuration
 @Profile("!test")
-public class MySqlConnectionFactory extends AbstractR2dbcConfiguration {
+public class MySqlConnectionFactoryDev extends AbstractR2dbcConfiguration {
 
     @Override
     @Bean
-    @Profile("prod")
+    @Profile("dev")
     public ConnectionFactory connectionFactory() {
         ConnectionFactoryOptions options = ConnectionFactoryOptions.builder()
                 .option(DRIVER, "mysql")

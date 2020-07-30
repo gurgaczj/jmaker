@@ -2,6 +2,7 @@ package com.gurgaczj.jmaker.security;
 
 import com.gurgaczj.jmaker.h2.TestDataInitializer;
 import com.gurgaczj.jmaker.jwt.JwtUtils;
+import com.gurgaczj.jmaker.model.ErrorMessage;
 import com.gurgaczj.jmaker.model.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,9 @@ import reactor.test.StepVerifier;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 public class AuthorizationTests {
 
     private JwtUtils jwtUtils;
@@ -86,8 +86,8 @@ public class AuthorizationTests {
                 .expectComplete()
                 .verify();
 
-        StepVerifier.create(response.flatMap(clientResponse -> clientResponse.bodyToMono(String.class)))
-                .assertNext(username -> assertEquals("Access Denied", username))
+        StepVerifier.create(response.flatMap(clientResponse -> clientResponse.bodyToMono(ErrorMessage.class)))
+                .assertNext(msg -> assertEquals("Access Denied", msg.getMessage()))
                 .expectComplete()
                 .verify();
     }
