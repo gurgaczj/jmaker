@@ -9,9 +9,10 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `email` varchar(255) NOT NULL DEFAULT '',
   `creation` int(11) NOT NULL DEFAULT '0',
   `register_hash` varchar(255) DEFAULT NULL,
-  `is_enabled` tinyint(1) DEFAULT '0',
+  `is_enabled` boolean NOT NULL DEFAULT false,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `email` (`email`)
 );
 
 CREATE TABLE IF NOT EXISTS `players` (
