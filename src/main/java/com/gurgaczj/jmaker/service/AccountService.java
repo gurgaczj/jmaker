@@ -11,4 +11,8 @@ public interface AccountService {
     Mono<Account> findByUsername(String username);
 
     Flux<Account> findAll();
+
+    Mono<Account> findByHash(String hash);
+
+    //TODO: add toDto method
 }

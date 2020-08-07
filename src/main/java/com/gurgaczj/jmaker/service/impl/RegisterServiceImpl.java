@@ -2,11 +2,13 @@ package com.gurgaczj.jmaker.service.impl;
 
 import com.gurgaczj.jmaker.dto.AccountDto;
 import com.gurgaczj.jmaker.exception.MailSenderException;
+import com.gurgaczj.jmaker.exception.RegisterException;
 import com.gurgaczj.jmaker.mail.EmailService;
 import com.gurgaczj.jmaker.model.Account;
 import com.gurgaczj.jmaker.model.MailSendingParams;
 import com.gurgaczj.jmaker.model.Register;
 import com.gurgaczj.jmaker.service.AccountService;
+import com.gurgaczj.jmaker.service.DtoMapper;
 import com.gurgaczj.jmaker.service.RegisterService;
 import com.gurgaczj.jmaker.validator.register.Validator;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -55,17 +57,35 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
+    public Mono<AccountDto> verifyAccount(String verificationCode) {
+        return Mono.just(verificationCode)
+                .flatMap(code -> accountService.findByHash(code))
+                .switchIfEmpty(Mono.error(new RegisterException("Cannot verify this account. Make sure you have good url")))
+                .flatMap(account ->
+                        account.isEnabled() ? Mono.error(new RegisterException("Your account has been verified")) :
+                                setAccountEnabled(account)
+                )
+                .flatMap(account -> accountService.save(account))
+                .flatMap(account -> toDto(account));
+    }
+
+    private Mono<Account> setAccountEnabled(Account account) {
+        account.setEnabled(true);
+        return Mono.just(account);
+    }
+
+    @Override
     public Mono<AccountDto> register(Register register) {
         return Mono.just(register)
-                .flatMap(r -> validator.validate(r))
-                .map(this::createAccount)
-                .flatMap(accountService::save)
-                .flatMap(acc -> checkMailSending(acc))
+                .flatMap(registerModel -> validator.validate(registerModel))
+                .map(registerModel -> createAccount(registerModel))
+                .flatMap(account -> accountService.save(account))
+                .flatMap(account -> checkMailSending(account))
                 .switchIfEmpty(Mono.error(
                         new MailSenderException(
                                 "Error during email verification sending. Contact administration about this.")))
                 //.switchIfEmpty(Mono.error(RegisterException::new))
-                .flatMap(this::toDto);
+                .flatMap(account -> toDto(account));
     }
 
     private Mono<Account> checkMailSending(Account acc) {
@@ -96,11 +116,12 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     private Mono<AccountDto> toDto(Account account) {
-        return Mono.just(account)
-                .map(acc -> {
-                    ModelMapper modelMapper = new ModelMapper();
-                    return modelMapper.map(acc, AccountDto.class);
-                });
+//        return Mono.just(account)
+//                .map(acc -> {
+//                    ModelMapper modelMapper = new ModelMapper();
+//                    return modelMapper.map(acc, AccountDto.class);
+//                });
+        return Mono.just(DtoMapper.toDto(account, AccountDto.class));
     }
 
     private Account createAccount(Register registerModel) {

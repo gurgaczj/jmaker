@@ -7,4 +7,6 @@ import reactor.core.publisher.Mono;
 public interface RegisterService {
 
     Mono<AccountDto> register(Register register);
+
+    Mono<AccountDto> verifyAccount(String verificationCode);
 }

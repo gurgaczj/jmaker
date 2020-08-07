@@ -19,7 +19,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-//    @Transactional
     public Mono<Account> save(Account account) {
         return accountRepository.save(account);
     }
@@ -32,5 +31,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Flux<Account> findAll() {
         return accountRepository.findAll();
+    }
+
+    @Override
+    public Mono<Account> findByHash(String hash) {
+        return accountRepository.findByHash(hash);
     }
 }

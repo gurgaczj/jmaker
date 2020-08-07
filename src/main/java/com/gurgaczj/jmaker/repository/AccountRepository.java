@@ -9,4 +9,6 @@ import reactor.core.publisher.Mono;
 public interface AccountRepository extends ReactiveCrudRepository<Account, Long> {
 
     Mono<Account> findByUsername(String username);
+
+    Mono<Account> findByHash(String hash);
 }

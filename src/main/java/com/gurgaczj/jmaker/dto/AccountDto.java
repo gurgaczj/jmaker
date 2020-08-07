@@ -13,4 +13,5 @@ public class AccountDto {
     private Long lastDay;
     private String email;
     private Long creationDate;
+
 }
