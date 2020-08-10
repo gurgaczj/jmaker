@@ -4,6 +4,7 @@ import com.gurgaczj.jmaker.dto.AccountDto;
 import com.gurgaczj.jmaker.h2.TestDataInitializer;
 import com.gurgaczj.jmaker.model.Register;
 import com.gurgaczj.jmaker.repository.AccountRepository;
+import com.gurgaczj.jmaker.service.AccountService;
 import com.gurgaczj.jmaker.validator.register.RegisterValidatorTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class AccountControllerTests {
+public class RegisterTests {
 
     @LocalServerPort
     private int port;
 
-    private AccountRepository accountRepository;
-
-    @Autowired
-    public void setAccountRepository(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
+    private AccountService accountService;
 
     @Test
     public void registerTest() {
