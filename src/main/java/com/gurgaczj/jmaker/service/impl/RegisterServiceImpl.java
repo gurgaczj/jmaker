@@ -25,6 +25,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 public class RegisterServiceImpl implements RegisterService {
@@ -133,10 +135,17 @@ public class RegisterServiceImpl implements RegisterService {
         account.setPassword(passwordEncoder.encode(registerModel.getPassword()));
         account.setPremiumDays(0L);
         account.setType(1);
-        account.setHash(DigestUtils.sha1Hex(registerModel.getEmail().getBytes()));
+        account.setHash(DigestUtils.sha1Hex(createUniqueString(registerModel).getBytes()));
         if (!shouldSendActivationMail)
             account.setEnabled(true);
 
         return account;
+    }
+
+    private String createUniqueString(Register registerModel) {
+        StringBuilder res = new StringBuilder(registerModel.getUsername());
+        res.append(registerModel.getEmail());
+        res.append(LocalDateTime.now().toString());
+        return res.toString();
     }
 }

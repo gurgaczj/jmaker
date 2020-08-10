@@ -28,8 +28,8 @@ public class AccountController {
 
     @Operation(description = "Verifies account")
     @PreAuthorize("hasRole('ANONYMOUS')")
-    @GetMapping(path = "/verify", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<Mono<AccountDto>> verifyAccount(@PathVariable("hash") String verificationCode){
-        return Mono.just(registerService.verifyAccount(verificationCode));
+    @PostMapping(path = "/verify", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<AccountDto> verifyAccount(@RequestParam("account") String verificationCode){
+        return registerService.verifyAccount(verificationCode);
     }
 }
