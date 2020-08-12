@@ -1,4 +1,4 @@
-package com.gurgaczj.jmaker.service;
+package com.gurgaczj.jmaker.mapper;
 
 import com.gurgaczj.jmaker.dto.AccountDto;
 import com.gurgaczj.jmaker.mapper.DtoMapper;
