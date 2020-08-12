@@ -8,11 +8,10 @@ import com.gurgaczj.jmaker.model.Account;
 import com.gurgaczj.jmaker.model.MailSendingParams;
 import com.gurgaczj.jmaker.model.Register;
 import com.gurgaczj.jmaker.service.AccountService;
-import com.gurgaczj.jmaker.service.DtoMapper;
+import com.gurgaczj.jmaker.mapper.DtoMapper;
 import com.gurgaczj.jmaker.service.RegisterService;
 import com.gurgaczj.jmaker.validator.register.Validator;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,7 +24,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service

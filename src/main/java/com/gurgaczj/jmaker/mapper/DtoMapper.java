@@ -1,4 +1,4 @@
-package com.gurgaczj.jmaker.service;
+package com.gurgaczj.jmaker.mapper;
 
 import org.modelmapper.ModelMapper;
 
