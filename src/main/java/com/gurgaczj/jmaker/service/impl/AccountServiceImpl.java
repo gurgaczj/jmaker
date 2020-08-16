@@ -1,5 +1,7 @@
 package com.gurgaczj.jmaker.service.impl;
 
+import com.gurgaczj.jmaker.dto.AccountDto;
+import com.gurgaczj.jmaker.mapper.DtoMapper;
 import com.gurgaczj.jmaker.model.Account;
 import com.gurgaczj.jmaker.repository.AccountRepository;
 import com.gurgaczj.jmaker.service.AccountService;
@@ -7,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.security.Principal;
 
 @Service
 @Transactional
@@ -36,5 +40,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Mono<Account> findByHash(String hash) {
         return accountRepository.findByHash(hash);
+    }
+
+    @Override
+    public Mono<AccountDto> getAccount(Principal principal) {
+        return findByUsername(principal.getName())
+                .map(account -> DtoMapper.toDto(account, AccountDto.class));
     }
 }
