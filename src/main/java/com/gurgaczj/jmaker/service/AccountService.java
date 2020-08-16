@@ -1,6 +1,7 @@
 package com.gurgaczj.jmaker.service;
 
 import com.gurgaczj.jmaker.dto.AccountDto;
+import com.gurgaczj.jmaker.dto.AccountLessInfoDto;
 import com.gurgaczj.jmaker.model.Account;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -18,6 +19,8 @@ public interface AccountService {
     Mono<Account> findByHash(String hash);
 
     Mono<AccountDto> getAccount(Principal principal);
+
+    Mono<AccountLessInfoDto> getAccountByName(String accountName);
 
     //TODO: add toDto method
 }

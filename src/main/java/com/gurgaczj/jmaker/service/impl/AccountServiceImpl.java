@@ -1,6 +1,7 @@
 package com.gurgaczj.jmaker.service.impl;
 
 import com.gurgaczj.jmaker.dto.AccountDto;
+import com.gurgaczj.jmaker.dto.AccountLessInfoDto;
 import com.gurgaczj.jmaker.mapper.DtoMapper;
 import com.gurgaczj.jmaker.model.Account;
 import com.gurgaczj.jmaker.repository.AccountRepository;
@@ -46,5 +47,11 @@ public class AccountServiceImpl implements AccountService {
     public Mono<AccountDto> getAccount(Principal principal) {
         return findByUsername(principal.getName())
                 .map(account -> DtoMapper.toDto(account, AccountDto.class));
+    }
+
+    @Override
+    public Mono<AccountLessInfoDto> getAccountByName(String accountName) {
+        return findByUsername(accountName)
+                .map(account -> DtoMapper.toDto(account, AccountLessInfoDto.class));
     }
 }

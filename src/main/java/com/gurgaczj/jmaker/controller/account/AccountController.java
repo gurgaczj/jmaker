@@ -1,6 +1,7 @@
 package com.gurgaczj.jmaker.controller.account;
 
 import com.gurgaczj.jmaker.dto.AccountDto;
+import com.gurgaczj.jmaker.dto.AccountLessInfoDto;
 import com.gurgaczj.jmaker.model.Register;
 import com.gurgaczj.jmaker.service.AccountService;
 import com.gurgaczj.jmaker.service.RegisterService;
@@ -39,9 +40,16 @@ public class AccountController {
     }
 
     @Operation(description = "Return account data of authorized user via JSON Web Token")
-    @GetMapping({"/", ""})
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_TUTOR', 'ROLE_SENIOR_TUTOR', 'ROLE_GAME_MASTER', 'ROLE_COMMUNITY_MANAGER', 'ROLE_ADMIN')")
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
+    @PreAuthorize("hasAnyRole('USER', 'TUTOR', 'SENIOR_TUTOR', 'GAME_MASTER', 'COMMUNITY_MANAGER', 'ADMIN')")
     public Mono<AccountDto> getAccount(Principal principal){
         return accountService.getAccount(principal);
+    }
+
+    @Operation(description = "Return account data by account name. Available for anyone")
+    @GetMapping(value = "/{accountName}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
+    @PreAuthorize("hasAnyRole('USER', 'TUTOR', 'SENIOR_TUTOR', 'GAME_MASTER', 'COMMUNITY_MANAGER', 'ADMIN', 'ANONYMOUS')")
+    public Mono<AccountLessInfoDto> getAccountByName(@PathVariable String accountName){
+        return accountService.getAccountByName(accountName);
     }
 }
