@@ -1,7 +1,6 @@
 package com.gurgaczj.jmaker.controller.account;
 
 import com.gurgaczj.jmaker.dto.AccountDto;
-import com.gurgaczj.jmaker.dto.AccountLessInfoDto;
 import com.gurgaczj.jmaker.model.NewPassword;
 import com.gurgaczj.jmaker.model.Register;
 import com.gurgaczj.jmaker.service.AccountService;
@@ -9,7 +8,6 @@ import com.gurgaczj.jmaker.service.RegisterService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -48,10 +46,10 @@ public class AccountController {
         return accountService.getAccount(principal);
     }
 
-    @Operation(description = "Return account data by account name. Available for anyone")
+    @Operation(description = "Return account data by account name. Admin only")
     @GetMapping(value = "/{accountName}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
-    @PreAuthorize("hasAnyRole('USER', 'TUTOR', 'SENIOR_TUTOR', 'GAME_MASTER', 'COMMUNITY_MANAGER', 'ADMIN', 'ANONYMOUS')")
-    public Mono<AccountLessInfoDto> getAccountByName(@PathVariable String accountName){
+    @PreAuthorize("hasRole('ADMIN')")
+    public Mono<AccountDto> getAccountByName(@PathVariable String accountName){
         return accountService.getAccountByName(accountName);
     }
 
@@ -62,4 +60,12 @@ public class AccountController {
     public Mono<AccountDto> editAccount(@PathVariable String accountName, @RequestBody AccountDto accountData){
         return accountService.editAccount(accountName, accountData);
     }
+
+    @Operation(description = "Edits user password")
+    @PutMapping(value = "/password", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+    @PreAuthorize("hasAnyRole('USER', 'TUTOR', 'SENIOR_TUTOR', 'GAME_MASTER', 'COMMUNITY_MANAGER', 'ADMIN')")
+    public Mono<String> editPassword(Principal principal, @RequestBody NewPassword newPassword){
+        return accountService.updatePassword(principal, newPassword);
+    }
+
 }

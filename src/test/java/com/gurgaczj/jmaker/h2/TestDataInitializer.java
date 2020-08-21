@@ -21,8 +21,8 @@ public class TestDataInitializer implements CommandLineRunner {
         this.accountRepository = accountRepository;
     }
 
-    public static final String TEST_USER = "username";
-    public static final String TEST_USER_PASS = "password";
+    public static String TEST_USER = "username";
+    public static String TEST_USER_PASS = "password";
 
     @Override
     public void run(String... args) throws Exception {

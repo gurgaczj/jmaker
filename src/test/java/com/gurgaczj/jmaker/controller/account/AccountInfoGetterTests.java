@@ -53,7 +53,7 @@ public class AccountInfoGetterTests {
 
     @Test
     public void getAccountByNameTest() {
-        String token = jwtUtils.generateToken(username, Arrays.asList(new SimpleGrantedAuthority(Role.getRole(1))));
+        String token = jwtUtils.generateToken(username, Arrays.asList(new SimpleGrantedAuthority(Role.getRole(6))));
 
         Mono<AccountLessInfoDto> request = WebClient
                 .create("http://localhost:" + port + "/api/account/" + username)

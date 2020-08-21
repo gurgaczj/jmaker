@@ -1,8 +1,8 @@
 package com.gurgaczj.jmaker.service;
 
 import com.gurgaczj.jmaker.dto.AccountDto;
-import com.gurgaczj.jmaker.dto.AccountLessInfoDto;
 import com.gurgaczj.jmaker.model.Account;
+import com.gurgaczj.jmaker.model.NewPassword;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -20,7 +20,9 @@ public interface AccountService {
 
     Mono<AccountDto> getAccount(Principal principal);
 
-    Mono<AccountLessInfoDto> getAccountByName(String accountName);
+    Mono<AccountDto> getAccountByName(String accountName);
 
     Mono<AccountDto> editAccount(String accountName, AccountDto accountData);
+
+    Mono<String> updatePassword(Principal principal, NewPassword newPassword);
 }

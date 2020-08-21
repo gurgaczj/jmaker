@@ -1,8 +1,10 @@
 package com.gurgaczj.jmaker.service;
 
 import com.gurgaczj.jmaker.model.Account;
+import com.gurgaczj.jmaker.model.NewPassword;
 import com.gurgaczj.jmaker.repository.AccountRepository;
 import com.gurgaczj.jmaker.service.impl.AccountServiceImpl;
+import com.gurgaczj.jmaker.validator.register.PasswordValidator;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,26 +13,35 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import javax.security.auth.x500.X500Principal;
+import java.security.Principal;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 public class AccountServiceTests {
 
     @Mock
     private AccountRepository accountRepository;
+    @Mock
+    private PasswordValidator passwordValidator;
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     private AccountService accountService;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        accountService = new AccountServiceImpl(accountRepository);
+        accountService = new AccountServiceImpl(accountRepository, passwordValidator, passwordEncoder);
     }
 
     @Test
@@ -85,6 +96,25 @@ public class AccountServiceTests {
         Account result = accountService.findByHash(account.getHash()).block();
 
         assertEquals(account, result);
+    }
+
+    @Test
+    public void testEditPassword() {
+        Principal principal = new X500Principal("CN=username, OU=Jmaker, O=Jmaker, C=PL");
+        Account account = createAccount();
+        NewPassword newPassword = new NewPassword("password", "newPassword", "newPassword");
+
+        Mockito.when(accountRepository.findByUsername(principal.getName())).thenReturn(Mono.just(account));
+        Mockito.when(passwordEncoder.matches(newPassword.getOldPassword(), account.getPassword())).thenReturn(true);
+        Mockito.when(passwordEncoder.encode(any(String.class))).thenAnswer(invocation -> DigestUtils.sha1Hex((String) invocation.getArgument(0)));
+        Mockito.when(passwordValidator.validatePassword(any(String.class))).thenReturn(true);
+        Mockito.when(passwordValidator.passwordsTheSame(newPassword.getNewPassword(), newPassword.getVerifyNewPassword())).thenReturn(true);
+        Mockito.when(accountRepository.save(any(Account.class))).thenAnswer((Answer<Mono<Account>>) invocation -> Mono.just(invocation.getArgument(0)));
+
+        StepVerifier.create(accountService.updatePassword(principal, newPassword))
+                .assertNext(s -> assertEquals("ok", s))
+                .expectComplete()
+                .verify();
     }
 
     private Account createAccount() {
