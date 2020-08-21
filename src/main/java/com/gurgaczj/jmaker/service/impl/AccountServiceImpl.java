@@ -1,7 +1,6 @@
 package com.gurgaczj.jmaker.service.impl;
 
 import com.gurgaczj.jmaker.dto.AccountDto;
-import com.gurgaczj.jmaker.dto.AccountLessInfoDto;
 import com.gurgaczj.jmaker.exception.InternalServerException;
 import com.gurgaczj.jmaker.exception.NotFoundException;
 import com.gurgaczj.jmaker.exception.ValidationException;
@@ -77,12 +76,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Mono<String> updatePassword(Principal principal, NewPassword newPassword) {
+    public Mono<AccountDto> updatePassword(Principal principal, NewPassword newPassword) {
         return findByUsername(principal.getName())
                 .flatMap(account -> validatePasswords(account, newPassword))
                 .flatMap(account -> saveNewPassword(account, newPassword.getNewPassword()))
                 .switchIfEmpty(Mono.error(new InternalServerException("Error while saving new password. Try again later or contact administrator")))
-                .flatMap(account -> Mono.just("ok"));
+                .flatMap(account -> Mono.just(DtoMapper.toDto(account, AccountDto.class)));
     }
 
     private Mono<Account> validatePasswords(Account account, NewPassword newPassword) {
@@ -98,7 +97,7 @@ public class AccountServiceImpl implements AccountService {
         return Mono.just(account);
     }
 
-    private Mono<? extends Account> saveNewPassword(Account account, String newPassword) {
+    private Mono<Account> saveNewPassword(Account account, String newPassword) {
         return Mono.just(account)
                 .flatMap(acc -> {
                     acc.setPassword(passwordEncoder.encode(newPassword));

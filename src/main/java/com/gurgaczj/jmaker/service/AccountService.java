@@ -24,5 +24,5 @@ public interface AccountService {
 
     Mono<AccountDto> editAccount(String accountName, AccountDto accountData);
 
-    Mono<String> updatePassword(Principal principal, NewPassword newPassword);
+    Mono<AccountDto> updatePassword(Principal principal, NewPassword newPassword);
 }

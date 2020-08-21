@@ -61,11 +61,12 @@ public class AccountController {
         return accountService.editAccount(accountName, accountData);
     }
 
-    @Operation(description = "Edits user password")
-    @PutMapping(value = "/password", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+    @Operation(description = "Edits user password. Require authorization token")
+    @PutMapping(value = "/password", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('USER', 'TUTOR', 'SENIOR_TUTOR', 'GAME_MASTER', 'COMMUNITY_MANAGER', 'ADMIN')")
-    public Mono<String> editPassword(Principal principal, @RequestBody NewPassword newPassword){
+    public Mono<AccountDto> editPassword(Principal principal, @RequestBody NewPassword newPassword){
         return accountService.updatePassword(principal, newPassword);
     }
+
 
 }

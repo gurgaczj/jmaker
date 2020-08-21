@@ -11,14 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.Arrays;
 
+/**
+ * Place here tests that edits account.
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public class AccountEditorTests {
@@ -39,16 +44,16 @@ public class AccountEditorTests {
 
         String token = jwtUtils.generateToken(username, Arrays.asList(new SimpleGrantedAuthority(Role.getRole(1))));
 
-        Mono<String> request = WebClient
+        Mono<ClientResponse> request = WebClient
                 .create("http://localhost:" + port + "/api/account/password")
                 .put()
                 .header(HttpHeaders.AUTHORIZATION, token)
                 .body(Mono.just(newPassword), NewPassword.class)
-                .retrieve()
-                .bodyToMono(String.class);
+                .exchange();
+//                .bodyToMono(AccountDto.class);
 
         StepVerifier.create(request)
-                .assertNext(s -> Assertions.assertEquals("ok", s))
+                .assertNext(clientResponse -> Assertions.assertEquals(HttpStatus.OK, clientResponse.statusCode()))
                 .expectComplete()
                 .verify();
     }
