@@ -25,6 +25,7 @@ public class JwtAuthenticationFilter extends AuthenticationWebFilter {
 
     @Override
     protected Mono<Void> onAuthenticationSuccess(Authentication authentication, WebFilterExchange webFilterExchange) {
+        //TODO: update last login date
         return super.onAuthenticationSuccess(authentication, webFilterExchange);
     }
 }

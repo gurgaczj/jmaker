@@ -22,5 +22,5 @@ public interface AccountService {
 
     Mono<AccountLessInfoDto> getAccountByName(String accountName);
 
-    //TODO: add toDto method
+    Mono<AccountDto> editAccount(String accountName, AccountDto accountData);
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -64,6 +65,31 @@ public class AccountInfoGetterTests {
         StepVerifier
                 .create(request)
                 .assertNext(accountDto -> assertEquals(username, accountDto.getUsername()))
+                .expectComplete()
+                .verify();
+    }
+
+    @Test
+    public void editAccountDataTest(){
+        String token = jwtUtils.generateToken(username, Arrays.asList(new SimpleGrantedAuthority(Role.getRole(6))));
+        AccountDto newData = new AccountDto();
+        newData.setEmail("some.new123@mail.com");
+        newData.setPremiumDays(214L);
+        newData.setType(4);
+        newData.setUsername(username);
+        newData.setLastDay(123L);
+        newData.setCreationDate(231L);
+
+        Mono<AccountDto> request =
+                WebClient.create("http://localhost:" + port + "/api/account/" + username)
+                .put()
+                .body(Mono.just(newData), AccountDto.class)
+                .header(HttpHeaders.AUTHORIZATION, token)
+                .retrieve()
+                .bodyToMono(AccountDto.class);
+
+        StepVerifier.create(request)
+                .assertNext(accountDto -> assertEquals(newData.getEmail(), accountDto.getEmail()))
                 .expectComplete()
                 .verify();
     }

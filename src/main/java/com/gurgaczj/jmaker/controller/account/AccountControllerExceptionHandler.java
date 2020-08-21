@@ -1,6 +1,8 @@
 package com.gurgaczj.jmaker.controller.account;
 
+import com.gurgaczj.jmaker.exception.InternalServerException;
 import com.gurgaczj.jmaker.exception.MailSenderException;
+import com.gurgaczj.jmaker.exception.NotFoundException;
 import com.gurgaczj.jmaker.exception.RegisterException;
 import com.gurgaczj.jmaker.model.ErrorMessage;
 import io.r2dbc.spi.R2dbcDataIntegrityViolationException;
@@ -26,14 +28,14 @@ public class AccountControllerExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(MailSenderException.class)
+    @ExceptionHandler({MailSenderException.class, InternalServerException.class})
     public @ResponseBody
     Mono<ErrorMessage> handleMailSendFailure(Exception e) {
         return Mono.just(ErrorMessage.create(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(RegisterException.class)
+    @ExceptionHandler({RegisterException.class, NotFoundException.class})
     public @ResponseBody
     Mono<ErrorMessage> handleRegisterError(Exception e) {
         return Mono.just(ErrorMessage.create(HttpStatus.BAD_REQUEST, e.getMessage()));

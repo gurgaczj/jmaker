@@ -35,7 +35,7 @@ public class TestDataInitializer implements CommandLineRunner {
         account.setPassword(passwordEncoder.encode(TEST_USER_PASS));
         account.setPremiumDays(325235L);
         account.setEnabled(true);
-        account.setType(1);
+        account.setType(6);
 
         account = accountRepository.save(account).block();
     }
