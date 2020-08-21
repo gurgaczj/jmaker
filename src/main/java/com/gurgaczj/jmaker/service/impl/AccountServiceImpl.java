@@ -11,6 +11,8 @@ import com.gurgaczj.jmaker.model.NewPassword;
 import com.gurgaczj.jmaker.repository.AccountRepository;
 import com.gurgaczj.jmaker.service.AccountService;
 import com.gurgaczj.jmaker.validator.RegisterValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,8 @@ import java.security.Principal;
 @Service
 @Transactional
 public class AccountServiceImpl implements AccountService {
+
+    private final static Logger log = LoggerFactory.getLogger(AccountServiceImpl.class);
 
     private final AccountRepository accountRepository;
     private final RegisterValidator registerValidator;
@@ -40,6 +44,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Mono<Account> findByUsername(String username) {
+        log.info("Looking for user with username " + username);
         return accountRepository.findByUsername(username)
                 .switchIfEmpty(Mono.error(new NotFoundException("Could not find account with username " + username)));
     }
@@ -78,6 +83,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Mono<AccountDto> updatePassword(Principal principal, NewPassword newPassword) {
+        log.info("Updating password for user " + principal.getName());
         return findByUsername(principal.getName())
                 .flatMap(account -> checkPasswords(account, newPassword))
                 .flatMap(account -> saveNewPassword(account, newPassword.getNewPassword()))
@@ -87,6 +93,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Mono<AccountDto> editEmail(Principal principal, Email email) {
+        log.info("Updating email for user " + principal.getName());
         return findByUsername(principal.getName())
                 .flatMap(account -> checkEmail(account, email))
                 .flatMap(account -> saveNewEmail(account, email))
