@@ -6,10 +6,11 @@ import com.gurgaczj.jmaker.exception.NotFoundException;
 import com.gurgaczj.jmaker.exception.ValidationException;
 import com.gurgaczj.jmaker.mapper.DtoMapper;
 import com.gurgaczj.jmaker.model.Account;
+import com.gurgaczj.jmaker.model.Email;
 import com.gurgaczj.jmaker.model.NewPassword;
 import com.gurgaczj.jmaker.repository.AccountRepository;
 import com.gurgaczj.jmaker.service.AccountService;
-import com.gurgaczj.jmaker.validator.PasswordValidator;
+import com.gurgaczj.jmaker.validator.RegisterValidator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,12 +24,12 @@ import java.security.Principal;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
-    private final PasswordValidator passwordValidator;
+    private final RegisterValidator registerValidator;
     private final PasswordEncoder passwordEncoder;
 
-    public AccountServiceImpl(AccountRepository accountRepository, PasswordValidator passwordValidator, PasswordEncoder passwordEncoder) {
+    public AccountServiceImpl(AccountRepository accountRepository, RegisterValidator registerValidator, PasswordEncoder passwordEncoder) {
         this.accountRepository = accountRepository;
-        this.passwordValidator = passwordValidator;
+        this.registerValidator = registerValidator;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -78,20 +79,47 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Mono<AccountDto> updatePassword(Principal principal, NewPassword newPassword) {
         return findByUsername(principal.getName())
-                .flatMap(account -> validatePasswords(account, newPassword))
+                .flatMap(account -> checkPasswords(account, newPassword))
                 .flatMap(account -> saveNewPassword(account, newPassword.getNewPassword()))
                 .switchIfEmpty(Mono.error(new InternalServerException("Error while saving new password. Try again later or contact administrator")))
                 .flatMap(account -> Mono.just(DtoMapper.toDto(account, AccountDto.class)));
     }
 
-    private Mono<Account> validatePasswords(Account account, NewPassword newPassword) {
-        if(!passwordEncoder.matches(newPassword.getOldPassword(), account.getPassword()))
+    @Override
+    public Mono<AccountDto> editEmail(Principal principal, Email email) {
+        return findByUsername(principal.getName())
+                .flatMap(account -> checkEmail(account, email))
+                .flatMap(account -> saveNewEmail(account, email))
+                .switchIfEmpty(Mono.error(new InternalServerException("Error while saving new email. Try again later or contact administrator")))
+                .flatMap(account -> Mono.just(DtoMapper.toDto(account, AccountDto.class)));
+    }
+
+    private Mono<Account> checkEmail(Account account, Email email) {
+        if (!registerValidator.validateEmail(email.getEmail()))
+            return Mono.error(new ValidationException("New email address does not meet requirements"));
+
+        if (account.getEmail().equals(email.getEmail()))
+            return Mono.error(new ValidationException("Old and new email address are the same"));
+
+        return Mono.just(account);
+    }
+
+    private Mono<Account> saveNewEmail(Account account, Email email) {
+        return Mono.just(account)
+                .flatMap(acc -> {
+                    acc.setEmail(email.getEmail());
+                    return save(acc);
+                });
+    }
+
+    private Mono<Account> checkPasswords(Account account, NewPassword newPassword) {
+        if (!passwordEncoder.matches(newPassword.getOldPassword(), account.getPassword()))
             return Mono.error(new ValidationException("Old password does not match"));
 
-        if(!passwordValidator.validatePassword(newPassword.getNewPassword()))
+        if (!registerValidator.validatePassword(newPassword.getNewPassword()))
             return Mono.error(new ValidationException("New password does not meet requirements"));
 
-        if(!passwordValidator.passwordsTheSame(newPassword.getNewPassword(), newPassword.getVerifyNewPassword()))
+        if (!registerValidator.passwordsTheSame(newPassword.getNewPassword(), newPassword.getVerifyNewPassword()))
             return Mono.error(new ValidationException("Passwords are not the same"));
 
         return Mono.just(account);

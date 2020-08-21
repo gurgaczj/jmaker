@@ -2,16 +2,14 @@ package com.gurgaczj.jmaker.validator.register;
 
 import com.gurgaczj.jmaker.exception.RegisterException;
 import com.gurgaczj.jmaker.model.Register;
-import com.gurgaczj.jmaker.validator.EmailValidator;
-import com.gurgaczj.jmaker.validator.PasswordValidator;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @Component
-public class RegisterValidatorImpl extends AbstractRegisterValidator implements PasswordValidator, EmailValidator {
+public class RegisterValidatorImpl extends AbstractRegisterValidator {
 
     @Override
-    public Mono<Register> validate(Register register) {
+    public Mono<Register> validateRegisterModel(Register register) {
         return Mono.just(register)
                 .flatMap(re -> {
                     if(!super.validatePassword(re.getPassword()))
@@ -44,5 +42,10 @@ public class RegisterValidatorImpl extends AbstractRegisterValidator implements 
     @Override
     public boolean validateEmail(String emial) {
         return super.validateEmail(emial);
+    }
+
+    @Override
+    public boolean validateUsername(String username) {
+        return super.validateUsername(username);
     }
 }

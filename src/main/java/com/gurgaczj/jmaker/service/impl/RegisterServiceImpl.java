@@ -42,12 +42,12 @@ public class RegisterServiceImpl implements RegisterService {
     @Value("${jmaker.account.verification-param}")
     private String param;
 
-    private final RegisterValidator<Register, Register> registerValidator;
+    private final RegisterValidator registerValidator;
     private final PasswordEncoder passwordEncoder;
     private final AccountService accountService;
     private final EmailService emailService;
 
-    public RegisterServiceImpl(RegisterValidator<Register, Register> registerValidator,
+    public RegisterServiceImpl(RegisterValidator registerValidator,
                                @Qualifier("sha1PasswordEncoder") PasswordEncoder passwordEncoder,
                                AccountService accountService, EmailService emailService) {
         this.registerValidator = registerValidator;
@@ -77,7 +77,7 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public Mono<AccountDto> register(Register register) {
         return Mono.just(register)
-                .flatMap(registerModel -> registerValidator.validate(registerModel))
+                .flatMap(registerModel -> registerValidator.validateRegisterModel(registerModel))
                 .map(registerModel -> createAccount(registerModel))
                 .flatMap(account -> accountService.save(account))
                 .flatMap(account -> checkMailSending(account))

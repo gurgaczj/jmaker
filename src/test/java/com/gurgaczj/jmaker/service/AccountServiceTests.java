@@ -4,7 +4,7 @@ import com.gurgaczj.jmaker.model.Account;
 import com.gurgaczj.jmaker.model.NewPassword;
 import com.gurgaczj.jmaker.repository.AccountRepository;
 import com.gurgaczj.jmaker.service.impl.AccountServiceImpl;
-import com.gurgaczj.jmaker.validator.PasswordValidator;
+import com.gurgaczj.jmaker.validator.RegisterValidator;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ public class AccountServiceTests {
     @Mock
     private AccountRepository accountRepository;
     @Mock
-    private PasswordValidator passwordValidator;
+    private RegisterValidator passwordValidator;
     @Mock
     private PasswordEncoder passwordEncoder;
 

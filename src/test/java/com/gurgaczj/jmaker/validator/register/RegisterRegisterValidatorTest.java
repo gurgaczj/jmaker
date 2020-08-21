@@ -10,14 +10,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RegisterRegisterValidatorTest {
 
-    RegisterValidator<Register, Register> registerValidator = new RegisterValidatorImpl();
+    RegisterValidator registerValidator = new RegisterValidatorImpl();
 
     @Test
     public void registerValidatorTest(){
         Register register = getRegisterModel();
 
         StepVerifier
-                .create(registerValidator.validate(register))
+                .create(registerValidator.validateRegisterModel(register))
                 .assertNext(reg -> {
                     assertEquals(reg, register);
                 })
@@ -31,7 +31,7 @@ public class RegisterRegisterValidatorTest {
         register.setUsername("das");
 
         StepVerifier
-                .create(registerValidator.validate(register))
+                .create(registerValidator.validateRegisterModel(register))
                 .expectError(RegisterException.class)
 //                .expectComplete()
                 .verify();
@@ -43,7 +43,7 @@ public class RegisterRegisterValidatorTest {
         register.setEmail("mail.gfer-s@x");
 
         StepVerifier
-                .create(registerValidator.validate(register))
+                .create(registerValidator.validateRegisterModel(register))
                 .expectError(RegisterException.class)
                 .verify();
     }
@@ -54,7 +54,7 @@ public class RegisterRegisterValidatorTest {
         register.setPassword("Pass1@");
 
         StepVerifier
-                .create(registerValidator.validate(register))
+                .create(registerValidator.validateRegisterModel(register))
                 .expectError(RegisterException.class)
                 .verify();
     }
@@ -65,7 +65,7 @@ public class RegisterRegisterValidatorTest {
         register.setPassword("Password@");
 
         StepVerifier
-                .create(registerValidator.validate(register))
+                .create(registerValidator.validateRegisterModel(register))
                 .expectError(RegisterException.class)
                 .verify();
     }
@@ -76,7 +76,7 @@ public class RegisterRegisterValidatorTest {
         register.setPassword("password@1");
 
         StepVerifier
-                .create(registerValidator.validate(register))
+                .create(registerValidator.validateRegisterModel(register))
                 .expectError(RegisterException.class)
                 .verify();
     }
@@ -87,7 +87,7 @@ public class RegisterRegisterValidatorTest {
         register.setPassword("password1");
 
         StepVerifier
-                .create(registerValidator.validate(register))
+                .create(registerValidator.validateRegisterModel(register))
                 .expectError(RegisterException.class)
                 .verify();
     }
@@ -98,7 +98,7 @@ public class RegisterRegisterValidatorTest {
         register.setVerifyPassword("password1!");
 
         StepVerifier
-                .create(registerValidator.validate(register))
+                .create(registerValidator.validateRegisterModel(register))
                 .expectError(RegisterException.class)
                 .verify();
     }

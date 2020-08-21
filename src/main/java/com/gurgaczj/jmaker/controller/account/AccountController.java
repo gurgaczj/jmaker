@@ -1,6 +1,7 @@
 package com.gurgaczj.jmaker.controller.account;
 
 import com.gurgaczj.jmaker.dto.AccountDto;
+import com.gurgaczj.jmaker.model.Email;
 import com.gurgaczj.jmaker.model.NewPassword;
 import com.gurgaczj.jmaker.model.Register;
 import com.gurgaczj.jmaker.service.AccountService;
@@ -68,5 +69,10 @@ public class AccountController {
         return accountService.updatePassword(principal, newPassword);
     }
 
-
+    @Operation(description = "Edits user email. Require authorization token")
+    @PutMapping(value = "/email", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('USER', 'TUTOR', 'SENIOR_TUTOR', 'GAME_MASTER', 'COMMUNITY_MANAGER', 'ADMIN')")
+    public Mono<AccountDto> editEmail(Principal principal, @RequestBody Email email){
+        return accountService.editEmail(principal, email);
+    }
 }

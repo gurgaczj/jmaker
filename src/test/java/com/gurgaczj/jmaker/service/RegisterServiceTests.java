@@ -37,7 +37,7 @@ import static org.mockito.ArgumentMatchers.any;
 public class RegisterServiceTests {
 
     @Mock
-    private RegisterValidator<Register, Register> registerValidator = new RegisterValidatorImpl();
+    private RegisterValidator registerValidator = new RegisterValidatorImpl();
     private PasswordEncoder passwordEncoder = new Sha1PasswordEncoder();
     @Mock
     private AccountService accountService;
@@ -56,7 +56,7 @@ public class RegisterServiceTests {
     public void registerTest() {
         Register register = RegisterServiceTests.createRegisterModel();
 
-        Mockito.when(registerValidator.validate(register)).thenReturn(Mono.just(register));
+        Mockito.when(registerValidator.validateRegisterModel(register)).thenReturn(Mono.just(register));
         Mockito.when(accountService.save(any(Account.class))).thenAnswer(invocation -> {
             Account account = invocation.getArgument(0);
             account.setId(1L);
@@ -76,7 +76,7 @@ public class RegisterServiceTests {
     public void registerTest_validatorThrowError() {
         Register register = RegisterServiceTests.createRegisterModel();
 
-        Mockito.when(registerValidator.validate(register)).thenReturn(Mono.error(new RegisterException()));
+        Mockito.when(registerValidator.validateRegisterModel(register)).thenReturn(Mono.error(new RegisterException()));
 
         StepVerifier.create(registerService.register(register))
                 .expectError(RegisterException.class)
@@ -88,7 +88,7 @@ public class RegisterServiceTests {
         Register register = RegisterServiceTests.createRegisterModel();
         DataAccessException exception = new DataIntegrityViolationException("asd");
 
-        Mockito.when(registerValidator.validate(register)).thenReturn(Mono.just(register));
+        Mockito.when(registerValidator.validateRegisterModel(register)).thenReturn(Mono.just(register));
         Mockito.when(accountService.save(any(Account.class))).thenReturn(Mono.error(exception));
 
         StepVerifier.create(registerService.register(register))
@@ -100,7 +100,7 @@ public class RegisterServiceTests {
     public void registerTest_mailSenderThrowsError() {
         Register register = RegisterServiceTests.createRegisterModel();
 
-        Mockito.when(registerValidator.validate(register)).thenReturn(Mono.just(register));
+        Mockito.when(registerValidator.validateRegisterModel(register)).thenReturn(Mono.just(register));
         Mockito.when(accountService.save(any(Account.class))).thenAnswer(invocation -> {
             Account account = invocation.getArgument(0);
             account.setId(1L);
