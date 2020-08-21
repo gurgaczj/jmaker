@@ -128,7 +128,7 @@ public class RegisterServiceImpl implements RegisterService {
         Account account = new Account();
         account.setUsername(registerModel.getUsername());
         account.setCreationDate(Instant.now().getEpochSecond());
-        account.setEmail(registerModel.getEmail());
+        account.setEmail(registerModel.getEmail().toLowerCase());
         account.setLastDay(0L);
         account.setPassword(passwordEncoder.encode(registerModel.getPassword()));
         account.setPremiumDays(0L);
