@@ -4,7 +4,7 @@ import com.gurgaczj.jmaker.model.Account;
 import com.gurgaczj.jmaker.model.NewPassword;
 import com.gurgaczj.jmaker.repository.AccountRepository;
 import com.gurgaczj.jmaker.service.impl.AccountServiceImpl;
-import com.gurgaczj.jmaker.validator.register.PasswordValidator;
+import com.gurgaczj.jmaker.validator.PasswordValidator;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,6 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import javax.management.remote.JMXPrincipal;
-import javax.security.auth.x500.X500Principal;
 import java.security.Principal;
 import java.time.Instant;
 

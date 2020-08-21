@@ -9,7 +9,7 @@ import com.gurgaczj.jmaker.model.Account;
 import com.gurgaczj.jmaker.model.NewPassword;
 import com.gurgaczj.jmaker.repository.AccountRepository;
 import com.gurgaczj.jmaker.service.AccountService;
-import com.gurgaczj.jmaker.validator.register.PasswordValidator;
+import com.gurgaczj.jmaker.validator.PasswordValidator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

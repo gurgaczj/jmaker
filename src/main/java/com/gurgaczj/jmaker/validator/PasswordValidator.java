@@ -1,4 +1,4 @@
-package com.gurgaczj.jmaker.validator.register;
+package com.gurgaczj.jmaker.validator;
 
 public interface PasswordValidator {
 

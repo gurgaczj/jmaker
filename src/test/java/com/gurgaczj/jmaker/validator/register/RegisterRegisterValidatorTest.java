@@ -2,14 +2,15 @@ package com.gurgaczj.jmaker.validator.register;
 
 import com.gurgaczj.jmaker.exception.RegisterException;
 import com.gurgaczj.jmaker.model.Register;
+import com.gurgaczj.jmaker.validator.RegisterValidator;
 import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class RegisterValidatorTest {
+public class RegisterRegisterValidatorTest {
 
-    Validator<Register, Register> registerValidator = new RegisterValidatorImpl();
+    RegisterValidator<Register, Register> registerValidator = new RegisterValidatorImpl();
 
     @Test
     public void registerValidatorTest(){

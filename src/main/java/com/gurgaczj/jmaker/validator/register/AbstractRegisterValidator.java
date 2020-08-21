@@ -1,12 +1,13 @@
 package com.gurgaczj.jmaker.validator.register;
 
 import com.gurgaczj.jmaker.model.Register;
+import com.gurgaczj.jmaker.validator.RegisterValidator;
 import reactor.core.publisher.Mono;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class AbstractValidator implements Validator<Register, Register> {
+public abstract class AbstractRegisterValidator implements RegisterValidator<Register, Register> {
 
     @Override
     public abstract Mono<Register> validate(Register register);

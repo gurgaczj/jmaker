@@ -10,7 +10,7 @@ import com.gurgaczj.jmaker.model.Register;
 import com.gurgaczj.jmaker.security.encoder.Sha1PasswordEncoder;
 import com.gurgaczj.jmaker.service.impl.RegisterServiceImpl;
 import com.gurgaczj.jmaker.validator.register.RegisterValidatorImpl;
-import com.gurgaczj.jmaker.validator.register.Validator;
+import com.gurgaczj.jmaker.validator.RegisterValidator;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ import static org.mockito.ArgumentMatchers.any;
 public class RegisterServiceTests {
 
     @Mock
-    private Validator<Register, Register> validator = new RegisterValidatorImpl();
+    private RegisterValidator<Register, Register> registerValidator = new RegisterValidatorImpl();
     private PasswordEncoder passwordEncoder = new Sha1PasswordEncoder();
     @Mock
     private AccountService accountService;
@@ -49,14 +49,14 @@ public class RegisterServiceTests {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        registerService = new RegisterServiceImpl(validator, passwordEncoder, accountService, emailService);
+        registerService = new RegisterServiceImpl(registerValidator, passwordEncoder, accountService, emailService);
     }
 
     @Test
     public void registerTest() {
         Register register = RegisterServiceTests.createRegisterModel();
 
-        Mockito.when(validator.validate(register)).thenReturn(Mono.just(register));
+        Mockito.when(registerValidator.validate(register)).thenReturn(Mono.just(register));
         Mockito.when(accountService.save(any(Account.class))).thenAnswer(invocation -> {
             Account account = invocation.getArgument(0);
             account.setId(1L);
@@ -76,7 +76,7 @@ public class RegisterServiceTests {
     public void registerTest_validatorThrowError() {
         Register register = RegisterServiceTests.createRegisterModel();
 
-        Mockito.when(validator.validate(register)).thenReturn(Mono.error(new RegisterException()));
+        Mockito.when(registerValidator.validate(register)).thenReturn(Mono.error(new RegisterException()));
 
         StepVerifier.create(registerService.register(register))
                 .expectError(RegisterException.class)
@@ -88,7 +88,7 @@ public class RegisterServiceTests {
         Register register = RegisterServiceTests.createRegisterModel();
         DataAccessException exception = new DataIntegrityViolationException("asd");
 
-        Mockito.when(validator.validate(register)).thenReturn(Mono.just(register));
+        Mockito.when(registerValidator.validate(register)).thenReturn(Mono.just(register));
         Mockito.when(accountService.save(any(Account.class))).thenReturn(Mono.error(exception));
 
         StepVerifier.create(registerService.register(register))
@@ -100,7 +100,7 @@ public class RegisterServiceTests {
     public void registerTest_mailSenderThrowsError() {
         Register register = RegisterServiceTests.createRegisterModel();
 
-        Mockito.when(validator.validate(register)).thenReturn(Mono.just(register));
+        Mockito.when(registerValidator.validate(register)).thenReturn(Mono.just(register));
         Mockito.when(accountService.save(any(Account.class))).thenAnswer(invocation -> {
             Account account = invocation.getArgument(0);
             account.setId(1L);

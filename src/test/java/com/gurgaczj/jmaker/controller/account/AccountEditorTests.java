@@ -60,7 +60,7 @@ public class AccountEditorTests {
     @Test
     public void testEditPassword_passwordsAreNotTheSame(){
         NewPassword newPassword = new NewPassword(password, "newPassword!1", "notTheSamePassword");
-        
+
         String token = jwtUtils.generateToken(username, Arrays.asList(new SimpleGrantedAuthority(Role.getRole(1))));
 
         Mono<ClientResponse> request = WebClient

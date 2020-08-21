@@ -10,7 +10,7 @@ import com.gurgaczj.jmaker.model.Register;
 import com.gurgaczj.jmaker.service.AccountService;
 import com.gurgaczj.jmaker.mapper.DtoMapper;
 import com.gurgaczj.jmaker.service.RegisterService;
-import com.gurgaczj.jmaker.validator.register.Validator;
+import com.gurgaczj.jmaker.validator.RegisterValidator;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,15 +42,15 @@ public class RegisterServiceImpl implements RegisterService {
     @Value("${jmaker.account.verification-param}")
     private String param;
 
-    private final Validator<Register, Register> validator;
+    private final RegisterValidator<Register, Register> registerValidator;
     private final PasswordEncoder passwordEncoder;
     private final AccountService accountService;
     private final EmailService emailService;
 
-    public RegisterServiceImpl(Validator<Register, Register> validator,
+    public RegisterServiceImpl(RegisterValidator<Register, Register> registerValidator,
                                @Qualifier("sha1PasswordEncoder") PasswordEncoder passwordEncoder,
                                AccountService accountService, EmailService emailService) {
-        this.validator = validator;
+        this.registerValidator = registerValidator;
         this.passwordEncoder = passwordEncoder;
         this.accountService = accountService;
         this.emailService = emailService;
@@ -77,7 +77,7 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public Mono<AccountDto> register(Register register) {
         return Mono.just(register)
-                .flatMap(registerModel -> validator.validate(registerModel))
+                .flatMap(registerModel -> registerValidator.validate(registerModel))
                 .map(registerModel -> createAccount(registerModel))
                 .flatMap(account -> accountService.save(account))
                 .flatMap(account -> checkMailSending(account))
