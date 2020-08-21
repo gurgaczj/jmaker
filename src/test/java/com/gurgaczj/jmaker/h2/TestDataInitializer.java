@@ -39,4 +39,12 @@ public class TestDataInitializer implements CommandLineRunner {
 
         account = accountRepository.save(account).block();
     }
+
+    public static String getTestUserPass() {
+        return TEST_USER_PASS;
+    }
+
+    public static void setTestUserPass(String testUserPass) {
+        TEST_USER_PASS = testUserPass;
+    }
 }

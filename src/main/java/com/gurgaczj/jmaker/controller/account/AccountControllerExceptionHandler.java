@@ -1,9 +1,6 @@
 package com.gurgaczj.jmaker.controller.account;
 
-import com.gurgaczj.jmaker.exception.InternalServerException;
-import com.gurgaczj.jmaker.exception.MailSenderException;
-import com.gurgaczj.jmaker.exception.NotFoundException;
-import com.gurgaczj.jmaker.exception.RegisterException;
+import com.gurgaczj.jmaker.exception.*;
 import com.gurgaczj.jmaker.model.ErrorMessage;
 import io.r2dbc.spi.R2dbcDataIntegrityViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,7 +32,7 @@ public class AccountControllerExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({RegisterException.class, NotFoundException.class})
+    @ExceptionHandler({RegisterException.class, NotFoundException.class, ValidationException.class})
     public @ResponseBody
     Mono<ErrorMessage> handleRegisterError(Exception e) {
         return Mono.just(ErrorMessage.create(HttpStatus.BAD_REQUEST, e.getMessage()));

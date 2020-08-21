@@ -25,14 +25,14 @@ public class LoginFormAuthenticationTests {
     
     @Test
     public void authenticationTest(){
-        String username = TestDataInitializer.TEST_USER;
-        String password = TestDataInitializer.TEST_USER_PASS;
+//        String username = ;
+//        String password = ;
 
         WebClient
                 .create("http://localhost:" + this.port + "/login")
                 .post()
                 .accept(MediaType.APPLICATION_FORM_URLENCODED)
-                .bodyValue(createFormLoginData(username, password))
+                .bodyValue(createFormLoginData(TestDataInitializer.TEST_USER, TestDataInitializer.TEST_USER_PASS))
                 .exchange()
                 .as(StepVerifier::create)
                 .assertNext(clientResponse -> {

@@ -19,6 +19,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import javax.management.remote.JMXPrincipal;
 import javax.security.auth.x500.X500Principal;
 import java.security.Principal;
 import java.time.Instant;
@@ -100,7 +101,7 @@ public class AccountServiceTests {
 
     @Test
     public void testEditPassword() {
-        Principal principal = new X500Principal("CN=username, OU=Jmaker, O=Jmaker, C=PL");
+        Principal principal = new JMXPrincipal("username");
         Account account = createAccount();
         NewPassword newPassword = new NewPassword("password", "newPassword", "newPassword");
 
@@ -112,7 +113,7 @@ public class AccountServiceTests {
         Mockito.when(accountRepository.save(any(Account.class))).thenAnswer((Answer<Mono<Account>>) invocation -> Mono.just(invocation.getArgument(0)));
 
         StepVerifier.create(accountService.updatePassword(principal, newPassword))
-                .assertNext(s -> assertEquals("ok", s))
+                .assertNext(acc -> assertEquals(principal.getName(), acc.getUsername()))
                 .expectComplete()
                 .verify();
     }

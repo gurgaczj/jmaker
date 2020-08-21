@@ -40,7 +40,7 @@ public class AccountEditorTests {
     public void testEditPassword(){
         NewPassword newPassword = new NewPassword(password, "newPassword!1", "newPassword!1");
 
-        TestDataInitializer.TEST_USER_PASS = newPassword.getNewPassword();
+        TestDataInitializer.setTestUserPass(newPassword.getNewPassword());
 
         String token = jwtUtils.generateToken(username, Arrays.asList(new SimpleGrantedAuthority(Role.getRole(1))));
 
@@ -50,10 +50,28 @@ public class AccountEditorTests {
                 .header(HttpHeaders.AUTHORIZATION, token)
                 .body(Mono.just(newPassword), NewPassword.class)
                 .exchange();
-//                .bodyToMono(AccountDto.class);
 
         StepVerifier.create(request)
                 .assertNext(clientResponse -> Assertions.assertEquals(HttpStatus.OK, clientResponse.statusCode()))
+                .expectComplete()
+                .verify();
+    }
+
+    @Test
+    public void testEditPassword_passwordsAreNotTheSame(){
+        NewPassword newPassword = new NewPassword(password, "newPassword!1", "notTheSamePassword");
+        
+        String token = jwtUtils.generateToken(username, Arrays.asList(new SimpleGrantedAuthority(Role.getRole(1))));
+
+        Mono<ClientResponse> request = WebClient
+                .create("http://localhost:" + port + "/api/account/password")
+                .put()
+                .header(HttpHeaders.AUTHORIZATION, token)
+                .body(Mono.just(newPassword), NewPassword.class)
+                .exchange();
+
+        StepVerifier.create(request)
+                .assertNext(clientResponse -> Assertions.assertEquals(HttpStatus.BAD_REQUEST, clientResponse.statusCode()))
                 .expectComplete()
                 .verify();
     }
