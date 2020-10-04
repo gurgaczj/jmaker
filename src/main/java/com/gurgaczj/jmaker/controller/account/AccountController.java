@@ -75,4 +75,11 @@ public class AccountController {
     public Mono<AccountDto> editEmail(Principal principal, @RequestBody Email email){
         return accountService.editEmail(principal, email);
     }
+
+    @Operation(description = "Delete account. Admin and account owner only")
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('USER', 'TUTOR', 'SENIOR_TUTOR', 'GAME_MASTER', 'COMMUNITY_MANAGER', 'ADMIN')")
+    public Mono<AccountDto> deleteAccount(@PathVariable Long id, Principal principal) {
+        return accountService.deleteAccount(id, principal);
+    }
 }

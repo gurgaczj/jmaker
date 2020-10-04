@@ -117,6 +117,21 @@ public class AccountServiceTests {
                 .verify();
     }
 
+    @Test
+    public void testDeleteAccount() {
+        Principal principal = new JMXPrincipal("username");
+        Account account = createAccount();
+
+        Mockito.when(accountRepository.findByUsername(principal.getName())).thenReturn(Mono.just(account));
+        Mockito.when(accountRepository.findById(account.getId())).thenReturn(Mono.just(account));
+        Mockito.when(accountRepository.deleteById(account.getId())).thenReturn(Mono.empty());
+
+        StepVerifier.create(accountService.deleteAccount(account.getId(), principal))
+                .assertNext(accountDto -> assertEquals(account.getUsername(), accountDto.getUsername()))
+                .expectComplete()
+                .verify();
+    }
+
     private Account createAccount() {
         Account account = new Account();
         account.setUsername("username");
@@ -127,6 +142,7 @@ public class AccountServiceTests {
         account.setPremiumDays(0L);
         account.setType(1);
         account.setHash(DigestUtils.sha1Hex(account.getEmail().getBytes()));
+        account.setId(1L);
         return account;
     }
 }

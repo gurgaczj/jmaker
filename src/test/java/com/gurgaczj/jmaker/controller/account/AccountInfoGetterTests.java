@@ -35,7 +35,7 @@ public class AccountInfoGetterTests {
 
     @Test
     public void getAccountTest() {
-        String token = jwtUtils.generateToken(username, Arrays.asList(new SimpleGrantedAuthority(Role.getRole(1))));
+        String token = jwtUtils.generateToken(username, Arrays.asList(new SimpleGrantedAuthority(Role.getRole(1).name())));
 
         Mono<AccountDto> request = WebClient
                 .create("http://localhost:" + port + "/api/account")
@@ -53,7 +53,7 @@ public class AccountInfoGetterTests {
 
     @Test
     public void getAccountByNameTest() {
-        String token = jwtUtils.generateToken(username, Arrays.asList(new SimpleGrantedAuthority(Role.getRole(6))));
+        String token = jwtUtils.generateToken(username, Arrays.asList(new SimpleGrantedAuthority(Role.getRole(6).name())));
 
         Mono<AccountLessInfoDto> request = WebClient
                 .create("http://localhost:" + port + "/api/account/" + username)
@@ -71,7 +71,7 @@ public class AccountInfoGetterTests {
 
     @Test
     public void editAccountDataTest(){
-        String token = jwtUtils.generateToken(username, Arrays.asList(new SimpleGrantedAuthority(Role.getRole(6))));
+        String token = jwtUtils.generateToken(username, Arrays.asList(new SimpleGrantedAuthority(Role.getRole(6).name())));
         AccountDto newData = new AccountDto();
         newData.setEmail("some.new123@mail.com");
         newData.setPremiumDays(214L);

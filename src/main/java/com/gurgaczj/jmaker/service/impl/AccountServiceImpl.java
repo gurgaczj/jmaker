@@ -1,6 +1,7 @@
 package com.gurgaczj.jmaker.service.impl;
 
 import com.gurgaczj.jmaker.dto.AccountDto;
+import com.gurgaczj.jmaker.exception.ApplicationException;
 import com.gurgaczj.jmaker.exception.InternalServerException;
 import com.gurgaczj.jmaker.exception.NotFoundException;
 import com.gurgaczj.jmaker.exception.ValidationException;
@@ -8,6 +9,7 @@ import com.gurgaczj.jmaker.mapper.DtoMapper;
 import com.gurgaczj.jmaker.model.Account;
 import com.gurgaczj.jmaker.model.Email;
 import com.gurgaczj.jmaker.model.NewPassword;
+import com.gurgaczj.jmaker.model.Role;
 import com.gurgaczj.jmaker.repository.AccountRepository;
 import com.gurgaczj.jmaker.service.AccountService;
 import com.gurgaczj.jmaker.validator.RegisterValidator;
@@ -99,6 +101,35 @@ public class AccountServiceImpl implements AccountService {
                 .flatMap(account -> saveNewEmail(account, email))
                 .switchIfEmpty(Mono.error(new InternalServerException("Error while saving new email. Try again later or contact administrator")))
                 .flatMap(account -> Mono.just(DtoMapper.toDto(account, AccountDto.class)));
+    }
+
+    @Override
+    public Mono<AccountDto> deleteAccount(Long id, Principal principal) {
+        return accountRepository.findByUsername(principal.getName())
+                .flatMap(acc ->
+                        accountRepository.findById(id)
+                                .flatMap(account -> {
+                                    if (principal.getName().equals(account.getUsername()) || Role.ROLE_ADMIN.equals(Role.getRole(acc.getType()))) {
+                                        AccountDto dto = DtoMapper.toDto(account, AccountDto.class);
+                                        accountRepository.deleteById(id);
+                                        return Mono.just(dto);
+                                    }
+                                    return Mono.error(new ApplicationException("You are not account owner or admin"));
+                                })
+                                .switchIfEmpty(Mono.error(new NotFoundException("Could not find user with id " + id)))
+                )
+                .switchIfEmpty(Mono.error(new ApplicationException("Your account do not exist")));
+
+        /*return accountRepository.findById(id)
+                .flatMap(account -> {
+                    if (principal.getName().equals(account.getUsername()) || Role.ROLE_ADMIN.equals(Role.getRole(account.getType()))) {
+                        AccountDto dto = DtoMapper.toDto(account, AccountDto.class);
+                        accountRepository.deleteById(id);
+                        return Mono.just(dto);
+                    }
+                    return Mono.error(new ApplicationException("You are not account owner or admin"));
+                })
+                .switchIfEmpty(Mono.error(new NotFoundException("Could not find user with id " + id)));*/
     }
 
     private Mono<Account> checkEmail(Account account, Email email) {

@@ -32,8 +32,8 @@ public class AuthorizationTests {
     @Test
     public void auhorizationTest(){
         String username = TestDataInitializer.TEST_USER;
-        String role = Role.getRole(1);
-        String token = jwtUtils.generateToken(username, Collections.singletonList(new SimpleGrantedAuthority(role)));
+        Role role = Role.getRole(1);
+        String token = jwtUtils.generateToken(username, Collections.singletonList(new SimpleGrantedAuthority(role.name())));
 
         token = String.join(" ", "Bearer", token);
 

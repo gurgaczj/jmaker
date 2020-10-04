@@ -38,6 +38,18 @@ public class TestDataInitializer implements CommandLineRunner {
         account.setType(6);
 
         account = accountRepository.save(account).block();
+
+        Account admin = new Account();
+        admin.setUsername("admin");
+        admin.setCreationDate(Instant.now().getEpochSecond());
+        admin.setSecret("adminSecret");
+        admin.setEmail("admin@wpp.pl");
+        admin.setLastDay(3215235L);
+        admin.setPassword(passwordEncoder.encode(TEST_USER_PASS));
+        admin.setPremiumDays(325235L);
+        admin.setEnabled(true);
+        admin.setType(6);
+        admin = accountRepository.save(admin).block();
     }
 
     public static String getTestUserPass() {

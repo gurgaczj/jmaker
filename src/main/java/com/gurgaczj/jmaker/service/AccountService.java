@@ -28,4 +28,6 @@ public interface AccountService {
     Mono<AccountDto> updatePassword(Principal principal, NewPassword newPassword);
 
     Mono<AccountDto> editEmail(Principal principal, Email email);
+
+    Mono<AccountDto> deleteAccount(Long id, Principal principal);
 }
